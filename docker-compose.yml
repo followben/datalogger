@@ -1,0 +1,53 @@
+version: "3.9"
+   
+services:
+  satellite-temperature:
+    image: us.gcr.io/loft-orbital-public/hiring/challenges/ground-software/back-end/satellite-temperature:latest
+    ports:
+      - 4000:4000
+  redis:
+    image: redis:7
+    ports:
+      - 6379:6379
+  postgres:
+    image: postgres:14.0-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+  web:
+    build: ./
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runworker feed &
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8000"
+    environment:
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - WS_HOST=satellite-temperature
+      - WS_PORT=4000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CHANNEL_NAME=feed
+    restart: on-failure:5
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      satellite-temperature:
+        condition: service_started

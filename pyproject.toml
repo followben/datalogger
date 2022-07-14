@@ -1,0 +1,24 @@
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "challenge.settings"
+addopts = "--nomigrations"
+norecursedirs = [
+  ".vscode",
+  "venv",
+]
+testpaths = [
+  "challenge",
+]
+
+[tool.pyright]
+exclude = [
+  "**/__pycache__",
+]
+include = ["challenge"]
+reportMissingImports = true
+reportMissingTypeStubs = false

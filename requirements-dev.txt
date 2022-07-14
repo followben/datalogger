@@ -1,0 +1,6 @@
+-r challenge/requirements.txt
+black
+flake8
+isort
+mypy
+pytest-django
