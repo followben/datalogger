@@ -2,7 +2,7 @@
 
 Consumes a temperature feed and implements a GraphQL API to query the processed data.
 
-# Quick start
+## Quick start
 
 Ensure docker is running & you have docker compose
 
@@ -44,7 +44,7 @@ mutation {
 }
 ```
 
-# What is this?
+## What is this?
 
 A sample backend created in early 2021 as part of a coding challenge. It's a little out of date now, but still demonstrates the use of [Django](https://www.djangoproject.com), [Channels](https://channels.readthedocs.io/en/stable/) and [Graphene-Django](https://docs.graphene-python.org/projects/django/en/latest/) to build a GraphQL api.
 
